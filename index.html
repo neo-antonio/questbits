@@ -349,6 +349,13 @@ function saveBoss(){const d=bd;if(!d.name.trim())return toast('Give the boss bat
 function delBoss(id){if(!confirm('Delete this boss battle?'))return;S.bosses=S.bosses.filter(x=>x.id!=id);save();closeM();render()}
 function openBL(id){bl={id,amt:1};const b=S.bosses.find(x=>x.id==id);$('#sh').innerHTML=`<h1>${esc(b.name)}</h1><label>Add progress (${esc(b.unit||'units')})</label><input type="number" min="1" value="1" oninput="bl.amt=+this.value"><div class="row" style="margin-top:22px"><button class="btn g" onclick="closeM()">Cancel</button><button class="btn" onclick="addBL()">Add</button></div>`;$('#md').classList.add('on')}
 function addBL(){const b=S.bosses.find(x=>x.id==bl.id),a=Math.floor(bl.amt);if(!(a>0))return;b.prog=(b.prog||0)+a;save();closeM();render()}
+function addTag(t){t=(t||'').trim().toLowerCase();if(t&&!S.tags.includes(t)){S.tags.push(t);save();render()}}
+function delTag(t){S.tags=S.tags.filter(x=>x!=t);S.habits.forEach(h=>h.tags=(h.tags||[]).filter(x=>x!=t));save();render()}
+
+/* ---- editor ---- */
+function edit(id){const h=id?get(id):{id:uid(),name:'',desc:'',type:'active',status:'pending',tags:[],sched:{mode:'daily',count:1},pct:0,target:80,pxp:1,coins:5,exp:10,logs:{},isNew:1};
+ draft=JSON.parse(JSON.stringify(h));drawEd();$('#md').classList.add('on')}
+function closeM(){$('#md').classList.remove('on')}
 function cancelEd(){draft.isNew?closeM():openView(draft.id)}
 function cancelBoss(){bd.id?openBossView(bd.id):closeM()}
 function openView(id){const h=get(id);if(!h)return;
