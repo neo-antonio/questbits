@@ -65,7 +65,7 @@ label{display:block;font-size:13px;color:var(--mu);margin:16px 0 7px}
 .bar{height:8px;background:var(--card2);border-radius:9px;position:relative;margin:12px 0 4px}.bar div{height:100%;background:var(--ac);border-radius:9px;transition:width .4s}.bar u{position:absolute;top:-4px;width:2px;height:16px;background:var(--warn)}
 .me{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}.me .ic{width:60px;height:60px;border-radius:20px;background:var(--ac);color:var(--on)}.me svg{width:32px;height:32px}
 .fb{position:relative;background:var(--card);box-shadow:var(--sh);border:0;color:var(--tx);border-radius:12px;padding:12px 16px;font:inherit;display:flex;gap:8px;align-items:center}.fb svg{width:18px;height:18px}
-.toast{position:fixed;left:50%;bottom:104px;transform:translate(-50%,20px);background:var(--ac);color:var(--on);font-weight:500;padding:10px 18px;border-radius:14px;opacity:0;transition:.3s;z-index:20;pointer-events:none;white-space:nowrap}.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast{position:fixed;left:50%;bottom:104px;transform:translate(-50%,20px);background:var(--ac);color:var(--on);font-weight:500;padding:10px 18px;border-radius:14px;opacity:0;transition:.3s;z-index:20;pointer-events:none;width:max-content;max-width:calc(100vw - 32px);text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}
 .sec{background:var(--card);border-radius:var(--r);padding:18px 16px;margin-bottom:16px;box-shadow:var(--sh)}
 .sec>h2{margin:0 0 14px;color:var(--tx);font-size:16px;font-weight:700}.sec h2+label{margin-top:0}
 .sec .chip{background:var(--card2);box-shadow:none}.sec .chip.on{background:var(--ac)}
@@ -97,8 +97,22 @@ textarea{resize:vertical;min-height:84px;line-height:1.4}
 .gear{transition:transform .15s}.gear:active{transform:scale(.88)}.gear.bk:active svg{transform:translateX(-3px)}
 .gear.spin:not(.bk) svg{animation:spin .45s ease-out}@keyframes spin{to{transform:rotate(90deg)}}
 .nrow{display:flex;align-items:center;gap:8px}.nrow .nm{flex:1;min-width:0}.nrow .st{flex:none;margin:0}
-.card .ic{align-self:stretch;width:72px;height:auto;min-height:64px;border-radius:14px}
+.card .ic{align-self:center;flex:none;width:72px;height:72px;aspect-ratio:1/1;min-height:0;border-radius:14px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.mini{height:5px;background:var(--card2);border-radius:9px;margin:8px 0 3px;overflow:hidden}.mini i{display:block;height:100%;background:var(--ac);border-radius:9px}
+.rw{display:flex;align-items:center;gap:4px;flex-wrap:wrap}.rw .tg{margin:0}.rw .tg:first-of-type{margin-left:8px}
+.act{flex:none;align-self:center}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.stat{background:var(--card);border-radius:14px;padding:10px 12px;box-shadow:var(--sh);min-width:0}.stat.w2{grid-column:1/-1}
+.stat small{display:block;font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.4px}.stat b{display:block;font-weight:500;margin-top:3px;overflow-wrap:anywhere}.stat b.big{font-size:28px;font-weight:700}
+.stat .bar{margin:8px 0 4px}
+.row.sm .btn{padding:11px 6px}
+.up{color:var(--ac)}.dn{color:var(--bad)}
+.hn{font-size:13px;color:var(--mu);margin-top:3px;line-height:1.35;overflow-wrap:anywhere}
+.card.q{display:block}.qh{display:flex;align-items:center;gap:12px}.card .qh .ic{align-self:center}
+.qb{margin-top:10px}.qb>.mini:first-child{margin-top:0}.qf{display:flex;align-items:center;gap:10px}.qf>div{flex:1;min-width:0}.qf .act{padding:9px 18px}
+.chiprow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px}.chiprow .st,.chiprow .tg{margin:0;font-size:12px;line-height:1.2;padding:5px 12px;border-radius:99px}.st.ty{color:var(--mu)}
+.fx .hero+h1::after{display:none}
 </style>
 </head>
 <body>
@@ -128,9 +142,10 @@ const COIN='<svg class="cn" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" f
 const cap=t=>t?t[0].toUpperCase()+t.slice(1):'';
 const UI='<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>';
 const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const def=()=>({habits:[],tags:['hygiene','health','fitness','mind','work','social'],theme:'Black',fx:true,music:false,vol:.4,game:{on:true,coins:0,exp:0,per:100},shop:[],owned:[],bosses:[]});
+const def=()=>({habits:[],tags:['hygiene','health','fitness','mind','work','social'],theme:'Ocean',fx:true,music:false,vol:.4,game:{on:true,coins:0,exp:0,per:100,dim:{on:true,free:5,rate:80,floor:10,cap:50},slots:{active:{base:3,at:[5,10,15,20,30]},passive:{base:2,at:[8,16,24]}},day:{d:'',n:0,c:0}},shop:[],owned:[],bosses:[]});
 let S;try{S=JSON.parse(localStorage.getItem(K))||def()}catch{S=def()}
-S={...def(),...S};delete S.mode;if(!THEMES.hasOwnProperty(S.theme))S.theme='Black';S.game={...def().game,...S.game};
+S={...def(),...S};delete S.mode;if(!THEMES.hasOwnProperty(S.theme))S.theme='Ocean';S.game={...def().game,...S.game};migrate();
+function migrate(){S.game={...def().game,...S.game};const D0=def().game;S.game.dim={...D0.dim,...S.game.dim};S.game.slots={active:{...D0.slots.active,...S.game.slots?.active},passive:{...D0.slots.passive,...S.game.slots?.passive}};(S.shop||[]).forEach(i=>{if(i.lvl==null){const r=+i.req||0;i.lvl=r>0?Math.ceil(r/(S.game.per||100))+1:0}delete i.req});S.habits.forEach(h=>{if(h.type=='passive'){h.hist=h.hist||[];if(h.pcn==null)h.pcn=0}})}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch{toast('Storage is full. Remove some images.')}};
 const t12=t=>{if(!t)return'';const h=+t.slice(0,2),m=t.slice(3,5);return (h%12||12)+':'+m+(h<12?' AM':' PM')};
 const pad=n=>String(n).padStart(2,'0');
@@ -143,20 +158,51 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const get=id=>S.habits.find(h=>h.id==id);
 const live=h=>h.status=='training'||h.status=='review';
+const sn=s=>s=='training'?'fighting':s;
+const sg=n=>(n>0?'+':n<0?'−':'')+fmt(Math.abs(n));
+function schedTxt(h){const s=sc(h),q=h.qty?.on?` · ${h.qty.target} ${h.qty.unit||'units'}`:'';let b;
+ if(s.mode=='week')b=`${s.count||1}× a week`;else if(s.mode=='days')b=(s.days||[]).slice().sort((a,c)=>a-c).map(d=>DAYS[d]).join(', ')||'No days set';else if(s.mode=='every')b=(s.n||1)>1?`Every ${s.n} days`:'Every day';else b=(s.count||1)>1?`${s.count}× a day`:'Daily';return b+q}
+function rwTxt(h){if(h.type=='passive')return `${COIN} ${h.pcn||0} · ${h.pxp??1} exp per 1%`;return h.qty?.on?`${COIN} ${h.qty.coins||0} · ${h.qty.exp||0} exp per ${esc(h.qty.unit||'unit')}`:`${COIN} ${h.coins||0} · ${h.exp||0} exp`}
+function progLine(h){if(h.type=='passive'){const v=h.pct||0,t=h.target||80;return `<div class="mini"><i style="width:${v}%"></i></div><div class="sub" style="margin:0">Mastery ${v}% · pass at ${t}%</div>`}
+ if(h.goal){const c=Math.min(h.comp||0,h.goal);return `<div class="mini"><i style="width:${c/h.goal*100}%"></i></div><div class="sub" style="margin:0">${c} / ${h.goal} to mastery</div>`}
+ return (h.comp||0)>0?`<div class="sub">${h.comp} completion${h.comp>1?'s':''}</div>`:''}
+const tgSp=h=>(h.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join('');
+const tagsH=h=>`<div>${(h.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join('')}</div>`;
 let tab=0,lf={st:'all',kind:'all',tag:'all',q:''},hv='active',draft=null;
 
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),Math.max(1800,String(m).length*50))}
 function applyTheme(){const fx=S.fx!==false,h=THEMES[S.theme]??0,bk=S.theme=='Black';
  let v=bk?{bg:'hsl(0 0% 95%)',card:'#fff',card2:'hsl(0 0% 90%)',ac:'#111',on:'#fff',tx:'hsl(0 0% 8%)',mu:'hsl(0 0% 36%)',sh:'0 2px 10px #0002',warn:'#a16207',org:'#c2410c',bad:'#be123c'}
  :{bg:`hsl(${h} 30% 95%)`,card:'#fff',card2:`hsl(${h} 28% 90%)`,ac:`hsl(${h} 85% 26%)`,on:'#fff',tx:`hsl(${h} 45% 10%)`,mu:`hsl(${h} 14% 38%)`,sh:`0 2px 10px hsl(${h} 30% 30%/.13)`,warn:'#a16207',org:'#c2410c',bad:'#be123c'};
  if(fx)v={...v,bg:'hsl(40 40% 89%)',card:'hsl(42 55% 95%)',card2:'hsl(38 35% 84%)',tx:'hsl(28 40% 14%)',mu:'hsl(30 18% 34%)',sh:'0 2px 10px hsl(30 40% 30%/.16)'};
  const r=document.documentElement.style;for(const k in v)r.setProperty('--'+k,v[k]);r.colorScheme='light';$('#tc').content=v.bg}
 const G=()=>true;
-function lv(){const p=S.game.per||100,e=S.game.exp;return{l:Math.floor(e/p)+1,cur:e%p,p}}
-function give(c,x){if(!G())return;const a=lv().l;S.game.coins=Math.max(0,S.game.coins+c);S.game.exp=Math.max(0,S.game.exp+x);const b=lv().l;
- if(c>0||x>0)toast(`+${c} coins · +${x} exp`+(b>a?` · Level ${b}!`:''))}
+const r2=n=>Math.round((+n||0)*100)/100,fmt=n=>String(r2(n));
+function lv(){const p=S.game.per||100,e=S.game.exp;return{l:Math.floor(e/p)+1,cur:r2(e%p),p}}
+function give(c,x,quiet,note){if(!G())return[0,0];const a=lv().l,c0=S.game.coins,x0=S.game.exp;S.game.coins=r2(Math.max(0,c0+c));S.game.exp=r2(Math.max(0,x0+x));const b=lv().l;
+ if(!quiet&&(c>0||x>0))toast(`+${fmt(c)} coins · +${fmt(x)} exp`+(note||'')+(b>a?` · Level ${b}!`:''));return[r2(S.game.coins-c0),r2(S.game.exp-x0)]}
+function dayStat(){const g=S.game,t=today();if(!g.day||g.day.d!=t)g.day={d:t,n:0,c:0};return g.day}
+function mult(k){const D=S.game.dim;if(!D.on)return 1;const f=Math.max(0,Math.floor(+D.free)||0);if(k<=f)return 1;return Math.max(Math.min(100,+D.floor||0)/100,Math.pow(Math.min(100,+D.rate||0)/100,k-f))}
+function earn(c,x,quiet){const D=S.game.dim,d=dayStat(),m=mult(d.n+1),cnt=c>0||x>0;if(!cnt)return[0,0,'',0];
+ let c2=r2(c*m),x2=r2(x*m),cap=false;
+ if(D.on!==false&&+D.cap>0){const left=Math.max(0,r2(D.cap-d.c));if(c2>left){c2=left;cap=true}}
+ const info=cap?' · daily coin cap reached':m<1?` · ${Math.round(m*100)}% (diminishing)`:'';
+ const r=give(c2,x2,quiet,info);d.n++;d.c=r2(d.c+r[0]);return[r[0],r[1],info,1]}
+function refund(h,key){const p=h.pay?.[key];let c,x,t=null;if(p){[c,x,t]=p;delete h.pay[key]}else{c=h.coins||0;x=h.exp||0}
+ give(-c,-x,1);if(t==today()){const d=dayStat();d.n=Math.max(0,d.n-1);d.c=Math.max(0,r2(d.c-c))}}
+function refundQ(h,key,done){const q=h.qpay?.[key];let c,x,n=0,t=null;if(q){[c,x,n,t]=q;delete h.qpay[key]}else{c=done*(h.qty.coins||0);x=done*(h.qty.exp||0)}
+ give(-c,-x,1);if(t==today()){const d=dayStat();d.n=Math.max(0,d.n-n);d.c=Math.max(0,r2(d.c-c))}}
+/* slots */
+const slotsOf=k=>{const c=S.game.slots[k],L=lv().l;return Math.max(0,Math.floor(+c.base)||0)+(c.at||[]).filter(l=>l<=L).length};
+const usedOf=k=>S.habits.filter(h=>h.type==k&&live(h)).length;
+const nextSlot=k=>{const L=lv().l,n=(S.game.slots[k].at||[]).filter(l=>l>L);return n.length?Math.min(...n):0};
+const slotMsg=k=>`No free ${k} slots (${usedOf(k)}/${slotsOf(k)}).`+(nextSlot(k)?` Next slot at level ${nextSlot(k)}.`:' Finish or pause a quest to free one.');
+const slotsLine=()=>G()?`<div class="hint" style="margin:-8px 0 12px">Slots · Active ${usedOf('active')}/${slotsOf('active')} · Passive ${usedOf('passive')}/${slotsOf('passive')}</div>`:'';
+function todayLine(){const D=S.game.dim,d=dayStat(),m=mult(d.n+1),cp=D.on!==false&&+D.cap>0;
+ return `<div class="hint" style="margin:-4px 0 10px">Today: ${d.n} completion${d.n==1?'':'s'} · ${fmt(d.c)}${cp?' / '+fmt(D.cap):''} coins · next earns ${Math.round(m*100)}%${cp&&d.c>=D.cap?' · coin cap reached':''}</div>`}
+const addedToday=h=>(h.hist||[]).some(e=>e.n>0&&e.d==today());
 function hdr(){const e=$('#hd');if(!G()){e.style.display='none';return}const g=S.game,L=lv();e.style.display='';
- e.innerHTML=`<div class="hi"><div class="lv">${L.l}</div><div class="xp"><div class="xt"><span>Level ${L.l}</span><span>${L.cur} / ${L.p} exp</span></div><div class="bar"><div style="width:${L.cur/L.p*100}%"></div></div></div><div class="coin">${COIN} ${g.coins}</div></div>`}
+ e.innerHTML=`<div class="hi"><div class="lv">${L.l}</div><div class="xp"><div class="xt"><span>Level ${L.l}</span><span>${fmt(L.cur)} / ${L.p} exp</span></div><div class="bar"><div style="width:${L.cur/L.p*100}%"></div></div></div><div class="coin">${COIN} ${fmt(g.coins)}</div></div>`}
 function go(i){if(i==2&&tab==2)gv='guild';tab=i;document.querySelectorAll('.tab').forEach((e,j)=>e.classList.toggle('on',i==j));document.querySelectorAll('nav button').forEach((e,j)=>e.classList.toggle('on',i==j));$('#fab').style.display=i==0?'':'none';render()}
 function imgErr(e){const p=e.parentNode,u=e.dataset.fb=='ui';e.remove();p.insertAdjacentHTML('beforeend',u?UI:PH)}
 function thumb(src,fb){return src?`<img src="${esc(src)}" alt="" referrerpolicy="no-referrer" ${fb===UI?'data-fb="ui" ':''}onerror="imgErr(this)">`:(fb||PH)}
@@ -187,10 +233,10 @@ function mark(h,key,on){h.paid=h.paid||{};
 function tap(id,date){const h=get(id);if(h.qty?.on)return openQty(id,date);const it=items().find(i=>i.h.id==id),s=sc(h);h.logs=h.logs||{};h.paid=h.paid||{};
  const key=it.week?weekStart(date):date;
  if(it.done>=it.need){if(it.week){const w=weekStart(date);for(let i=0;i<7;i++)delete h.logs[addD(w,i)]}else delete h.logs[date];
-  if(h.paid[key]){give(-(h.coins||0),-(h.exp||0));mark(h,key,false)}}
+  if(h.paid[key]){refund(h,key);mark(h,key,false)}}
  else{h.logs[date]=(h.logs[date]||0)+1;
   if(it.done+1>=it.need){if(it.missed&&s.mode=='every'){s.anchor=today();toast('Schedule shifted to today')}
-   if(!h.paid[key]){give(h.coins||0,h.exp||0);mark(h,key,true)}}}
+   if(!h.paid[key]){const r=earn(h.coins||0,h.exp||0);(h.pay=h.pay||{})[key]=[r[0],r[1],today()];mark(h,key,true)}}}
  save();render()}
 let qd={};
 function openQty(id,date){qd={id,date,amt:1};const h=get(id),it=items().find(i=>i.h.id==id),u=esc(h.qty.unit||'units');
@@ -198,11 +244,11 @@ function openQty(id,date){qd={id,date,amt:1};const h=get(id),it=items().find(i=>
  <label>How many ${u} did you complete?</label><input type="number" min="1" value="1" oninput="qd.amt=+this.value">
  <div class="row" style="margin-top:22px"><button class="btn d" onclick="resetQty()">Reset</button><button class="btn g" onclick="closeM()">Cancel</button><button class="btn" onclick="addQty()">Add</button></div>`;$('#md').classList.add('on')}
 function addQty(){const h=get(qd.id),a=Math.floor(qd.amt),it=items().find(i=>i.h.id==h.id);if(!(a>0))return toast('Enter an amount');
- h.logs=h.logs||{};const key=it.week?weekStart(qd.date):qd.date;h.logs[qd.date]=(h.logs[qd.date]||0)+a;give(a*(h.qty.coins||0),a*(h.qty.exp||0));
+ h.logs=h.logs||{};const key=it.week?weekStart(qd.date):qd.date;h.logs[qd.date]=(h.logs[qd.date]||0)+a;const r=earn(a*(h.qty.coins||0),a*(h.qty.exp||0)),q=(h.qpay=h.qpay||{})[key]||[0,0,0,''];h.qpay[key]=[r2(q[0]+r[0]),r2(q[1]+r[1]),q[2]+r[3],today()];
  if(it.done<it.need&&it.done+a>=it.need){const s=sc(h);if(it.missed&&s.mode=='every')s.anchor=today();mark(h,key,true)}
  save();closeM();render()}
 function resetQty(){const h=get(qd.id),it=items().find(i=>i.h.id==h.id),key=it.week?weekStart(qd.date):qd.date;
- give(-it.done*(h.qty.coins||0),-it.done*(h.qty.exp||0));if(it.week){const w=weekStart(qd.date);for(let i=0;i<7;i++)delete h.logs[addD(w,i)]}else delete h.logs[qd.date];
+ refundQ(h,key,it.done);if(it.week){const w=weekStart(qd.date);for(let i=0;i<7;i++)delete h.logs[addD(w,i)]}else delete h.logs[qd.date];
  mark(h,key,false);save();closeM();render()}
 function missedList(){const t=today(),out=[];
  S.habits.filter(h=>h.type=='active'&&live(h)).forEach(h=>{if(sc(h).mode=='week')return;
@@ -218,31 +264,56 @@ function renderList(){
  const bs=S.bosses.filter(b=>lf.kind=='all'&&lf.tag=='all'&&b.name.toLowerCase().includes(lf.q.toLowerCase())&&(lf.st=='archived'?b.state!='active':lf.st=='all'&&b.state=='active'));
  const hs=S.habits.filter(h=>lf.st!='archived'&&(lf.st=='all'||h.status==lf.st)&&(lf.kind=='all'||h.type==lf.kind)&&(lf.tag=='all'||(h.tags||[]).includes(lf.tag))&&h.name.toLowerCase().includes(lf.q.toLowerCase()));
  const x=(k,l)=>lf[k]!='all'?`<button class="chip on" onclick="lf.${k}='all';renderList()">${esc(l||lf[k])} ×</button>`:'';
- $('#t0').innerHTML=`<h1>${G()?'Quests':'All habits'}</h1>
+ const card=h=>{const pend=h.status=='pending',done=h.status=='complete',tg=(h.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join(''),
+  b=pend?`<button class="btn act" onclick="event.stopPropagation();accept('${h.id}')">Accept</button>`:done?`<button class="btn g act" onclick="event.stopPropagation();retake('${h.id}')">Retake</button>`:'',pl=progLine(h);
+  return `<div class="card q" onclick="openView('${h.id}')"><div class="qh">${icon(h)}<div class="grow"><div class="nrow"><div class="nm">${esc(h.name)}</div><span class="st ${h.status}">${sn(h.status)}</span></div>${h.desc?`<div class="ds">${esc(h.desc)}</div>`:''}
+  <div class="sub">${h.type=='passive'?'Passive':'Active · '+schedTxt(h)+(h.time?' · '+t12(h.time):'')}</div></div></div>${pl||tg||b?`<div class="qb">${pl}${tg||b?`<div class="qf"><div>${tg}</div>${b}</div>`:''}</div>`:''}</div>`};
+ $('#t0').innerHTML=`<h1>${G()?'Quests':'All habits'}</h1>${slotsLine()}
  <div class="row" style="flex-wrap:nowrap;margin-bottom:10px"><input placeholder="Search habits" value="${esc(lf.q)}" oninput="lf.q=this.value;renderList();const i=$('#t0 input');i.focus();i.setSelectionRange(99,99)"><button class="fb" style="flex:none" onclick="openFilter()"><svg viewBox="0 0 24 24"><path d="M3 5h18M6 12h12M10 19h4"/></svg>Filter${nF()?' · '+nF():''}</button></div>
- ${nF()?`<div class="chips" style="margin-bottom:8px">${x('st')}${x('kind')}${x('tag')}</div>`:''}
- ${bs.map(bcard).join('')}${hs.length||bs.length?hs.map(h=>`<div class="card" onclick="openView('${h.id}')">${icon(h)}<div class="grow"><div class="nrow"><div class="nm">${esc(h.name)}</div><span class="st ${h.status}">${h.status}</span></div>${h.desc?`<div class="ds">${esc(h.desc)}</div>`:''}
- <div class="sub">${cap(h.type)}${h.time&&h.type=='active'?' · '+t12(h.time):''}${h.type=='passive'?` · ${h.pct||0}% / ${h.target||80}%`:''}</div>
- <div>${(h.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join('')}</div></div></div>`).join(''):`<div class="empty">No habits match.<br>Tap + to add one.</div>`}`}
-function openFilter(){const c=(k,v)=>`<button class="chip ${lf[k]==v?'on':''}" onclick="lf.${k}='${v}';openFilter();renderList()">${esc(v)}</button>`;
+ ${nF()?`<div class="chips" style="margin-bottom:8px">${x('st',sn(lf.st))}${x('kind')}${x('tag')}</div>`:''}
+ ${bs.map(bcard).join('')}${hs.length||bs.length?hs.map(card).join(''):`<div class="empty">No habits match.<br>Tap + to add one.</div>`}`}
+function openFilter(){const c=(k,v)=>`<button class="chip ${lf[k]==v?'on':''}" onclick="lf.${k}='${v}';openFilter();renderList()">${esc(k=='st'?sn(v):v)}</button>`;
  $('#sh').innerHTML=`<h1>Filter</h1><label>Status</label><div class="chips w">${['all','pending','training','complete','review','archived'].map(v=>c('st',v)).join('')}</div>
  <label>Kind</label><div class="chips w">${['all','active','passive'].map(v=>c('kind',v)).join('')}</div>
  <label>Tag</label><div class="chips w">${['all',...S.tags].map(v=>c('tag',v)).join('')}</div>
  <div class="row" style="margin-top:22px"><button class="btn g" onclick="lf.st=lf.kind=lf.tag='all';openFilter();renderList()">Clear</button><button class="btn" onclick="closeM()">Show ${S.habits.filter(h=>(lf.st=='all'||h.status==lf.st)&&(lf.kind=='all'||h.type==lf.kind)&&(lf.tag=='all'||(h.tags||[]).includes(lf.tag))).length} habits</button></div>`;$('#md').classList.add('on')}
 function renderHabits(){
  const its=items(),pas=S.habits.filter(h=>h.type=='passive'&&live(h));
- let h=`<h1>${G()?'Adventure':'Today'}</h1>${bossPins()}<div class="chips" style="margin-bottom:10px"><button class="chip ${hv=='active'?'on':''}" onclick="hv='active';renderHabits()">Active · ${its.length}</button><button class="chip ${hv=='passive'?'on':''}" onclick="hv='passive';renderHabits()">Passive · ${pas.length}</button></div>`;
- const rw=h=>h.qty?.on?` · ${COIN} ${h.qty.coins||0} · ${h.qty.exp||0} exp per ${esc(h.qty.unit||'unit')}`:` · ${COIN} ${h.coins||0} · ${h.exp||0} exp`;
- if(hv=='active')h+=its.length?its.map(i=>`<div class="card ${i.missed?'miss':''}">${icon(i.h)}<div class="grow" onclick="openView('${i.h.id}')"><div class="nm">${esc(i.h.name)}</div>${i.h.desc?`<div class="ds">${esc(i.h.desc)}</div>`:''}
-  <div class="sub">${i.missed?'Missed '+i.date+' · do it now':i.week?'This week':'Today'}${i.h.time?' · '+t12(i.h.time):''}${i.h.qty?.on?` · ${i.done}/${i.need} ${esc(i.h.qty.unit||'units')}`:i.need>1?` · ${i.done}/${i.need}`:''}${i.h.goal?` · ${i.h.comp||0}/${i.h.goal} to mastery`:''}${rw(i.h)}</div><div>${(i.h.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join('')}</div></div>
-  <button class="ck ${i.done>=i.need?'done':''}" onclick="tap('${i.h.id}','${i.date}')">${i.done>=i.need?CHK:i.need>1?i.done+'/'+i.need:''}</button></div>`).join(''):`<div class="empty">Nothing due.<br>Move an active habit to Training or Review to track it.</div>`;
- else h+=pas.length?pas.map(p=>{const v=p.pct||0,t=p.target||80;return `<div class="card" style="display:block"><div style="display:flex;gap:12px;align-items:center" onclick="openView('${p.id}')">${icon(p)}<div class="grow"><div class="nm">${esc(p.name)}</div>${p.desc?`<div class="ds">${esc(p.desc)}</div>`:''}<div class="sub"><span class="st ${p.status}">${p.status}</span>Mastery ${v}% · pass at ${t}%${G()?` · ${p.pxp??1} exp per 1%`:''}</div><div>${(p.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join('')}</div></div></div>
-  <div class="bar"><div style="width:${v}%"></div><u style="left:${t}%"></u></div>
-  <input class="pw" type="range" min="0" max="100" value="${v}" oninput="this.closest('.card').querySelector('.bar div').style.width=this.value+'%'" onchange="setPct('${p.id}',this.value)">
-  ${v>=t?`<button class="btn" style="width:100%;margin-top:8px" onclick="setStatus('${p.id}','complete')">Reached target · mark complete</button>`:''}</div>`}).join(''):`<div class="empty">No passive habits in training or review.</div>`;
+ let h=`<h1>${G()?'Adventure':'Today'}</h1>${bossPins()}<div class="chips" style="margin-bottom:10px"><button class="chip ${hv=='active'?'on':''}" onclick="hv='active';renderHabits()">Active · ${usedOf('active')}/${slotsOf('active')}</button><button class="chip ${hv=='passive'?'on':''}" onclick="hv='passive';renderHabits()">Passive · ${usedOf('passive')}/${slotsOf('passive')}</button></div>${G()?todayLine():''}`;
+ if(hv=='active')h+=its.length?its.map(i=>`<div class="card q ${i.missed?'miss':''}"><div class="qh">${icon(i.h)}<div class="grow" onclick="openView('${i.h.id}')"><div class="nm">${esc(i.h.name)}</div>${i.h.desc?`<div class="ds">${esc(i.h.desc)}</div>`:''}
+  <div class="sub">${i.missed?'Missed '+i.date+' · do it now':i.week?'This week':'Today'}${i.h.time?' · '+t12(i.h.time):''}${i.h.qty?.on?` · ${i.done}/${i.need} ${esc(i.h.qty.unit||'units')}`:i.need>1?` · ${i.done}/${i.need}`:''}</div></div>
+  <button class="ck ${i.done>=i.need?'done':''}" onclick="tap('${i.h.id}','${i.date}')">${i.done>=i.need?CHK:i.need>1?i.done+'/'+i.need:''}</button></div>
+  <div class="qb" onclick="openView('${i.h.id}')">${progLine(i.h)}<div class="sub rw">${rwTxt(i.h)}${tgSp(i.h)}</div></div></div>`).join(''):`<div class="empty">Nothing due.<br>Accept a quest in the Quests tab to start fighting it.</div>`;
+ else h+=pas.length?pas.map(p=>{const v=p.pct||0,t=p.target||80,n=(p.hist||[]).length;return `<div class="card q"><div class="qh" onclick="openView('${p.id}')">${icon(p)}<div class="grow"><div class="nm">${esc(p.name)}</div>${p.desc?`<div class="ds">${esc(p.desc)}</div>`:''}<div class="sub"><span class="st ${p.status}">${sn(p.status)}</span>Mastery ${v}% · pass at ${t}%</div></div></div>
+  <div class="qb"><div class="bar" style="margin-top:0"><div style="width:${v}%"></div><u style="left:${t}%"></u></div><div onclick="openView('${p.id}')">${G()||(p.tags||[]).length?`<div class="sub rw">${G()?rwTxt(p):''}${tgSp(p)}</div>`:''}</div>
+  <div class="row sm" style="margin-top:10px"><button class="btn g" onclick="openAdj('${p.id}',-1)">− Reduce</button>${addedToday(p)?'<button class="btn g" disabled>Added today</button>':`<button class="btn" onclick="openAdj('${p.id}',1)">+ Add</button>`}<button class="btn g" onclick="openHist('${p.id}')">History${n?' · '+n:''}</button></div>
+  ${v>=t?`<button class="btn" style="width:100%;margin-top:8px" onclick="setStatus('${p.id}','complete')">Reached target · mark complete</button>`:''}</div></div>`}).join(''):`<div class="empty">No passive quests being fought or reviewed.</div>`;
  $('#t1').innerHTML=h}
-function setPct(id,v){const h=get(id);v=+v;const m=h.maxPct??h.pct??0;if(v>m){give(0,Math.round((v-m)*(h.pxp??1)));h.maxPct=v}h.pct=v;save();render()}
-function setStatus(id,s){const h=get(id);h.status=s;if(h.type=='passive'&&s=='complete'&&!h.bonus){h.bonus=1;give(h.coins||0,h.exp||0)}else toast('Status: '+s);save();render()}
+/* passive: add / reduce with notes + undo */
+let pa={};
+function adjAmt(){const h=get(pa.id),v=h.pct||0,r=pa.sign>0?100-v:v;return Math.min(Math.max(0,Math.floor(+pa.amt)||0),r)}
+function adjPrev(){const el=$('#ap');if(!el)return;const h=get(pa.id),n=adjAmt(),s=pa.sign,v=h.pct||0,f=s>0?mult(dayStat().n+1):1;
+ el.innerHTML=n?`${v}% → <b>${v+s*n}%</b>${G()?` · ${COIN} ${sg(s*n*(h.pcn||0)*f)} · ${sg(s*n*(h.pxp??1)*f)} exp${f<1?` (${Math.round(f*100)}%)`:''}`:''}`:(s>0?'Already at 100%':'Already at 0%')}
+function openAdj(id,s){const h=get(id),up=s>0;if(up&&addedToday(h))return toast('Already added today. Come back tomorrow.');pa={id,sign:s,amt:1,note:''};
+ $('#sh').innerHTML=`<h1>${esc(h.name)}</h1><p class="note">${up?'Add to your mastery. You earn coins and exp for each 1%. You can add once a day per quest.':'Reduce your mastery. You lose the same coins and exp for each 1%, but they never drop below 0.'}</p>
+ <label>${up?'How many % did you gain?':'How many % did you lose?'}</label><input type="number" min="1" max="100" value="1" oninput="pa.amt=this.value;adjPrev()">
+ <label>Why? (short note)</label><input maxlength="80" placeholder="${up?'e.g. Stayed calm in a tough meeting':'e.g. Snapped at someone'}" oninput="pa.note=this.value">
+ <div class="sub" id="ap" style="margin-top:14px;font-size:14px"></div>
+ <div class="row" style="margin-top:22px"><button class="btn g" onclick="closeM()">Cancel</button><button class="btn ${up?'':'d'}" onclick="applyAdj()">${up?'Add':'Reduce'}</button></div>`;$('#md').classList.add('on');adjPrev()}
+function applyAdj(){const h=get(pa.id),n=adjAmt(),s=pa.sign;if(!n)return adjPrev();
+ if(s>0&&addedToday(h))return toast('Already added today. Come back tomorrow.');
+ const r=s>0?earn(n*(h.pcn||0),n*(h.pxp??1),true):give(-n*(h.pcn||0),-n*(h.pxp??1),true),dc=r[0],dx=r[1];
+ h.pct=(h.pct||0)+s*n;(h.hist=h.hist||[]).unshift({id:uid(),d:today(),n:s*n,note:(pa.note||'').trim().slice(0,80),dc,dx,k:r[3]?1:0});if(h.hist.length>200)h.hist.length=200;
+ save();closeM();render();toast(`${sg(s*n)}% · ${sg(dc)} coins · ${sg(dx)} exp${r[2]||''}`)}
+function undoAdj(id,eid){const h=get(id),i=(h.hist||[]).findIndex(e=>e.id==eid);if(i<0)return;const e=h.hist[i];
+ give(-e.dc,-e.dx,1);if(e.n>0&&e.k&&e.d==today()){const d=dayStat();d.n=Math.max(0,d.n-1);d.c=Math.max(0,r2(d.c-e.dc))}h.pct=Math.min(100,Math.max(0,(h.pct||0)-e.n));h.hist.splice(i,1);save();render();drawHist(id);toast(`Undone · ${sg(-e.dc)} coins · ${sg(-e.dx)} exp`)}
+function openHist(id){drawHist(id);$('#md').classList.add('on')}
+function drawHist(id){const h=get(id),L=h.hist||[];
+ $('#sh').innerHTML=`<h1>${esc(h.name)}</h1><p class="note">Mastery ${h.pct||0}%. Every change is logged here. Undo reverses the coins and exp it gave or took.</p>`+(L.length?L.map(e=>`<div class="card"><div class="grow" style="cursor:default"><div class="nm ${e.n>0?'up':'dn'}">${sg(e.n)}%</div><div class="hn">${e.note?esc(e.note):'No note'}</div><div class="sub">${e.d} · ${COIN} ${sg(e.dc)} · ${sg(e.dx)} exp</div></div><button class="btn g" onclick="undoAdj('${id}','${e.id}')">Undo</button></div>`).join(''):'<div class="empty">No changes yet.<br>Use Add or Reduce to record one.</div>')+`<div class="row" style="margin-top:20px"><button class="btn g" onclick="closeM()">Close</button></div>`}
+/* accept / retake */
+function accept(id){const h=get(id);if(usedOf(h.type)>=slotsOf(h.type)){toast(slotMsg(h.type));return false}h.status='training';if(!h.since)h.since=today();if(h.type=='active'){h.sched=h.sched||{mode:'daily',count:1};if(h.sched.mode=='every')h.sched.anchor=h.sched.anchor||today()}save();render();toast('Quest accepted · now fighting');return true}
+function retake(id){const h=get(id);if(usedOf(h.type)>=slotsOf(h.type)){toast(slotMsg(h.type));return false}h.status='review';h.comp=0;h.since=today();if(h.sched?.mode=='every')h.sched.anchor=today();save();render();toast('Retake started · now in review');return true}
+function setStatus(id,s){const h=get(id);h.status=s;if(h.type=='passive'&&s=='complete'&&!h.bonus){h.bonus=1;give(h.coins||0,h.exp||0)}else toast('Status: '+sn(s));save();render()}
 const MU={run:0,ctx:null,out:null,tm:null,t:0,i:0,el:null};
 const MID=n=>440*Math.pow(2,(n-69)/12),CH=[[50,57,62,65],[48,55,60,64],[46,53,58,62],[48,55,60,64]],MEL=[62,65,67,69,72,74,77];
 function pluck(m,t,d,v){const C=MU.ctx,o=C.createOscillator(),g=C.createGain();o.type='triangle';o.frequency.value=MID(m);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0005,t+d);o.connect(g);g.connect(MU.out);o.start(t);o.stop(t+d+.05)}
@@ -278,9 +349,9 @@ d+=(i?'':'M'+p[0].join(' '))+'L'+p[1].join(' ')+'L'+p[2].join(' ')+'L'+p[3].join
 return `<svg viewBox="0 0 24 24"><path d="${d}Z"/><circle cx="12" cy="12" r="3"/></svg>`})(),BACK='<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>';
 function renderProfile(){if(gv=='set')return renderSettings();
  refreshShop();const g=S.game,L=lv();let o='';
- o+=sec(`Merchant shop · ${COIN} ${g.coins}`,(S.shop.length?S.shop.map(i=>{const lk=g.exp<i.req,out=!inf(i)&&(i.left??i.max)<=0,no=lk||out||g.coins<i.cost;return `<div class="card ${lk?'lock':''}">${icon(i)}<div class="grow" onclick="openShop('${i.id}')"><div class="nm">${esc(i.name)}</div><div class="sub">${COIN} ${i.cost}${i.req?` · ${lk?'Locked, needs':'needs'} ${i.req} exp`:''}</div><div class="sub">${stockTxt(i)}</div></div><button class="btn" ${no?'disabled':''} onclick="buy('${i.id}')">${out?'Sold out':'Buy'}</button></div>`}).join(''):'<p class="note">No rewards yet. Tap the button below to add one.</p>')+`<button class="btn" style="width:100%" onclick="openShop()">Add reward</button>`);
+ o+=sec(`Merchant shop · ${COIN} ${fmt(g.coins)}`,(S.shop.length?S.shop.map(i=>{const lk=L.l<(i.lvl||0),out=!inf(i)&&(i.left??i.max)<=0,no=lk||out||g.coins<i.cost;return `<div class="card ${lk?'lock':''}">${icon(i)}<div class="grow" onclick="openShop('${i.id}')"><div class="nm">${esc(i.name)}</div><div class="sub">${i.cost>0?`${COIN} ${i.cost}`:'Free'}${i.lvl?` · ${lk?'Locked, unlocks at':'Needs'} level ${i.lvl}`:''}</div><div class="sub">${stockTxt(i)}</div></div><button class="btn" ${no?'disabled':''} onclick="buy('${i.id}')">${out?'Sold out':lk?'Locked':'Buy'}</button></div>`}).join(''):'<p class="note">No rewards yet. Tap the button below to add one.</p>')+`<button class="btn" style="width:100%" onclick="openShop()">Add reward</button>`);
  if(S.owned.length)o+=sec('Your rewards',S.owned.map(w=>`<div class="card">${icon(w)}<div class="grow" style="cursor:default"><div class="nm">${esc(w.name)}</div><div class="sub">Bought ${w.date}</div></div><button class="btn g" onclick="useItem('${w.id}')">Use</button></div>`).join(''));
- $('#t2').innerHTML=`<div class="top"><h1>Guild</h1><button class="gear" style="margin-left:auto" onclick="spinGo(this,'set')" aria-label="Settings">${GEAR}</button></div><div class="me"><div class="ic" onclick="openProfile()" style="cursor:pointer">${thumb(S.avatar,UI)}</div><div class="grow"><div class="nm" style="font-size:18px">${esc(S.name||'Adventurer')}</div><div class="sub">Level ${L.l} · ${g.exp} total exp · ${S.habits.filter(h=>h.status=='complete').length} habits mastered</div></div><button class="btn g" onclick="openProfile()">Edit</button></div>`+o}
+ $('#t2').innerHTML=`<div class="top"><h1>Guild</h1><button class="gear" style="margin-left:auto" onclick="spinGo(this,'set')" aria-label="Settings">${GEAR}</button></div><div class="me"><div class="ic" onclick="openProfile()" style="cursor:pointer">${thumb(S.avatar,UI)}</div><div class="grow"><div class="nm" style="font-size:18px">${esc(S.name||'Adventurer')}</div><div class="sub">Level ${L.l} · ${fmt(g.exp)} total exp · ${S.habits.filter(h=>h.status=='complete').length} habits mastered</div></div><button class="btn g" onclick="openProfile()">Edit</button></div>`+o}
 function renderSettings(){const ms=missedList(),g=S.game;let o='';
  o+=sec('Appearance',`<label>Color theme</label><div class="chips">${Object.keys(THEMES).map(t=>tog(`S.theme='${t}';save();render()`,S.theme==t,t)).join('')}</div>
   <label>Medieval adventure style</label><div class="chips">${tog("S.fx=true;save();render()",S.fx!==false,'On')}${tog("S.fx=false;save();render()",S.fx===false,'Off')}</div>`);
@@ -289,15 +360,25 @@ function renderSettings(){const ms=missedList(),g=S.game;let o='';
   <label>Your own music (optional)</label><input type="url" inputmode="url" placeholder="Paste a direct link to an mp3 file" value="${esc(S.musicUrl||'')}" onchange="S.musicUrl=this.value.trim();save();if(S.music){musicOff();musicOn()}">
   <p class="note" style="margin:10px 0 0">Leave the link empty to play the built-in medieval tune. Music starts after your first tap.</p>`);
  o+=sec('Exp needed per level',`<p class="note" style="margin:0 0 12px">Every level needs the same amount of exp.</p><input type="number" min="1" value="${g.per}" onchange="S.game.per=Math.max(1,+this.value||100);save();render()">`);
+ o+=sec('Quest slots',`<p class="note" style="margin:0 0 4px">Only quests that are fighting or in review use a slot. Finishing a quest frees it. Quests already over the limit stay, but you can't accept new ones until a slot is free.</p>`+['active','passive'].map(k=>{const c=g.slots[k];return `<label>${cap(k)} slots at the start</label><input type="number" min="0" value="${c.base}" onchange="S.game.slots.${k}.base=Math.max(0,Math.floor(+this.value)||0);save();render()"><label>Levels that unlock another ${k} slot</label><input value="${c.at.join(', ')}" placeholder="e.g. 5, 10, 15" onchange="setUnlocks('${k}',this.value)"><div class="hint">You have ${slotsOf(k)} now (${usedOf(k)} used)${nextSlot(k)?` · next slot at level ${nextSlot(k)}`:' · no more unlocks'}.</div>`}).join(''));
+ {const D=g.dim,f=Math.max(0,Math.floor(+D.free)||0);o+=sec('Daily earning limits',`<p class="note" style="margin:0 0 4px">Every completion, amount entry or passive gain counts. After the free ones, coins and exp shrink. The coin cap stops coins for the day, and exp keeps flowing at the reduced rate. Undoing something gives its slot back.</p>
+  <label>Diminishing returns</label><div class="chips">${tog("S.game.dim.on=true;save();render()",D.on!==false,'On')}${tog("S.game.dim.on=false;save();render()",D.on===false,'Off')}</div>
+  <div class="row"><div><label>Full rewards for the first</label><input type="number" min="0" value="${D.free}" onchange="setDim('free',this.value)"></div><div><label>Each extra earns (% of the one before)</label><input type="number" min="0" max="100" value="${D.rate}" onchange="setDim('rate',this.value)"></div></div>
+  <div class="row"><div><label>Never below (%)</label><input type="number" min="0" max="100" value="${D.floor}" onchange="setDim('floor',this.value)"></div><div><label>Daily coin cap (0 = none)</label><input type="number" min="0" step="any" value="${D.cap}" onchange="setDim('cap',this.value)"></div></div>
+  <div class="hint">${D.on===false?'Diminishing returns are off.':'Completion '+[1,2,3,4,5].map(i=>`#${f+i} earns ${Math.round(mult(f+i)*100)}%`).join(', ')+'.'}</div>
+  <div class="hint">Today: ${dayStat().n} completions · ${fmt(dayStat().c)} coins earned.</div>
+  <button class="btn g" style="width:100%;margin-top:12px" onclick="S.game.dim={...def().game.dim};save();render();toast('Defaults restored')">Reset to defaults (${def().game.dim.free} free · ${def().game.dim.rate}% · min ${def().game.dim.floor}% · cap ${def().game.dim.cap})</button>`)}
  o+=sec('Fix missed habits · last 14 days',ms.length?ms.map(m=>`<div class="card">${icon(m.h)}<div class="grow" style="cursor:default"><div class="nm">${esc(m.h.name)}</div><div class="sub">${m.d}</div></div><button class="btn g" onclick="fix('${m.h.id}','${m.d}',${m.n})">Mark done</button></div>`).join(''):'<p class="note" style="margin:0">Nothing missed.</p>');
  o+=sec('Tags',`<div>${S.tags.map(t=>`<span class="tg" style="font-size:13px;padding:5px 11px">${esc(t)} <b onclick="delTag('${esc(t)}')" style="cursor:pointer;color:var(--bad)">×</b></span>`).join('')}</div><div class="row" style="margin-top:14px"><input id="nt" placeholder="New tag"><button class="btn" style="flex:none" onclick="addTag($('#nt').value)">Add</button></div>`);
  o+=sec('Data · stored only on this device',`<div class="row"><button class="btn g" onclick="exp('json')">Export JSON</button><button class="btn g" onclick="exp('csv')">Export CSV</button></div><p class="note" style="margin:12px 0 0">JSON includes everything. CSV covers habits only.</p><div class="row" style="margin-top:12px"><button class="btn g" onclick="$('#imp').click()">Import JSON / CSV</button><button class="btn d" onclick="if(confirm('Delete all data?')){S=def();save();render()}">Reset</button></div>`);
  $('#t2').innerHTML=`<div class="top"><button class="gear bk" onclick="spinGo(this,'guild')" aria-label="Back">${BACK}</button><h1>Settings</h1></div>`+o}
+function setUnlocks(k,v){S.game.slots[k].at=String(v).split(/[^0-9]+/).map(Number).filter(n=>n>=1).sort((a,b)=>a-b);save();render()}
+function setDim(k,v){v=Math.max(0,+v||0);if(k=='rate'||k=='floor')v=Math.min(100,v);if(k=='free')v=Math.floor(v);S.game.dim[k]=v;save();render()}
 const SM=[['inf','Unlimited stock'],['limited','Limited stock'],['every','Refills every X days'],['week','Refills on days of the week'],['month','Refills on a day of the month']];
-function openShop(id){const i=id&&S.shop.find(x=>x.id==id);sd=i?JSON.parse(JSON.stringify(i)):{name:'',cost:'',req:'',img:'',mode:'inf',max:5,n:7,days:[],dom:1};if(!sd.mode)sd.mode='inf';drawShop();$('#md').classList.add('on')}
+function openShop(id){const i=id&&S.shop.find(x=>x.id==id);sd=i?JSON.parse(JSON.stringify(i)):{name:'',cost:'',lvl:'',img:'',mode:'inf',max:5,n:7,days:[],dom:1};if(!sd.mode)sd.mode='inf';drawShop();$('#md').classList.add('on')}
 function drawShop(){const d=sd,m=d.mode;$('#sh').innerHTML=`<h1>${d.id?'Edit reward':'New reward'}</h1>
  <label>Name</label><input placeholder="e.g. Movie night" value="${esc(d.name)}" oninput="sd.name=this.value">
- <div class="row"><div><label>Coin cost</label><input type="number" min="0" value="${esc(d.cost)}" oninput="sd.cost=this.value"></div><div><label>Exp to unlock</label><input type="number" min="0" value="${esc(d.req)}" oninput="sd.req=this.value"></div></div>
+ <div class="row"><div><label>Coin cost</label><input type="number" min="0" step="any" value="${esc(d.cost)}" oninput="sd.cost=this.value"></div><div><label>Level to unlock</label><input type="number" min="0" value="${esc(d.lvl)}" oninput="sd.lvl=this.value"></div></div><div class="hint">Set a coin cost, a level, or both. Leave one at 0 to ignore it.</div>
  ${imgBlock(sd,'sd')}
  <label>Stock</label><select onchange="sd.mode=this.value;drawShop()">${SM.map(x=>`<option value="${x[0]}" ${m==x[0]?'selected':''}>${x[1]}</option>`).join('')}</select>
  ${m!='inf'?`<label>${m=='limited'?'Amount in stock':'Stock after each refill'}</label><input type="number" min="1" value="${d.max}" oninput="sd.max=Math.max(1,+this.value||1)">`:''}
@@ -307,11 +388,11 @@ function drawShop(){const d=sd,m=d.mode;$('#sh').innerHTML=`<h1>${d.id?'Edit rew
  ${d.id&&m!='inf'?`<label>In stock now</label><input type="number" min="0" value="${d.left??d.max}" oninput="sd.left=Math.max(0,+this.value||0)">`:''}
  <div class="row" style="margin-top:24px">${d.id?`<button class="btn d" onclick="delItem('${d.id}')">Delete</button>`:''}<button class="btn g" onclick="closeM()">Cancel</button><button class="btn" onclick="saveShop()">Save</button></div>`}
 function togSD(i){const a=sd.days=sd.days||[],j=a.indexOf(i);j<0?a.push(i):a.splice(j,1);drawShop()}
-function saveShop(){const d=sd,c=+d.cost;if(!d.name.trim()||d.cost===''||!(c>=0))return toast('Add a name and coin cost');
+function saveShop(){const d=sd,c=r2(Math.max(0,+d.cost||0)),lv0=Math.max(0,Math.floor(+d.lvl)||0);if(!d.name.trim())return toast('Add a name');if(!c&&!lv0)return toast('Set a coin cost, a level, or both');
  if(d.mode=='week'&&!(d.days||[]).length)return toast('Pick at least one day');
- d.name=d.name.trim();d.cost=c;d.req=+d.req||0;d.base=d.base||today();d.last=d.last||today();if(d.mode!='inf'&&d.left==null)d.left=d.max;if(d.left>d.max&&d.mode!='limited')d.left=d.max;
+ d.name=d.name.trim();d.cost=c;d.lvl=lv0;delete d.req;d.base=d.base||today();d.last=d.last||today();if(d.mode!='inf'&&d.left==null)d.left=d.max;if(d.left>d.max&&d.mode!='limited')d.left=d.max;
  const i=S.shop.findIndex(x=>x.id==d.id);if(i<0){d.id=uid();S.shop.push(d)}else S.shop[i]=d;save();closeM();render();toast('Reward saved')}
-function buy(id){refreshShop();const i=S.shop.find(x=>x.id==id),g=S.game;if(g.exp<i.req||g.coins<i.cost||(!inf(i)&&(i.left??i.max)<=0))return;g.coins-=i.cost;if(!inf(i))i.left=(i.left??i.max)-1;S.owned.push({id:uid(),name:i.name,img:i.img,date:today()});save();toast('Bought '+i.name);render()}
+function buy(id){refreshShop();const i=S.shop.find(x=>x.id==id),g=S.game;if(lv().l<(i.lvl||0)||g.coins<i.cost||(!inf(i)&&(i.left??i.max)<=0))return;g.coins=r2(g.coins-i.cost);if(!inf(i))i.left=(i.left??i.max)-1;S.owned.push({id:uid(),name:i.name,img:i.img,date:today()});save();toast('Bought '+i.name);render()}
 function useItem(id){S.owned=S.owned.filter(x=>x.id!=id);save();toast('Enjoy it!');render()}
 function delItem(id){if(!confirm('Delete this reward?'))return;S.shop=S.shop.filter(x=>x.id!=id);save();closeM();render()}
 function openProfile(){pd={name:S.name||'',img:S.avatar||''};drawProfile();$('#md').classList.add('on')}
@@ -329,7 +410,7 @@ function bossPins(){const t=today();return S.bosses.filter(b=>b.state=='active'&
  <div class="bar"><div style="width:${Math.min(100,p/b.target*100)}%"></div></div><div class="sub">${p} / ${b.target} ${esc(b.unit||'')} · Reward ${COIN} ${b.coins||0} · ${b.exp||0} exp</div></div>`}).join('')}
 function bcard(b){const on=b.state=='active';return `<div class="card" onclick="openBossView('${b.id}')">${icon(b)}<div class="grow"><div class="nrow"><div class="nm">${esc(b.name)}</div><span class="st ${on?'training':b.state=='won'?'complete':'bad'}">${on?'Boss battle':b.state=='won'?'Victory':'Defeat'}</span></div>${b.desc?`<div class="ds">${esc(b.desc)}</div>`:''}
  <div class="sub">${on?`${bossProg(b)} / ${b.target} ${esc(b.unit||'')} · ends ${b.end}`:'Ran '+b.start+' to '+b.end}</div>${on?'':'<span class="tg">Boss battle</span>'}</div></div>`}
-function openNew(){$('#sh').innerHTML=`<h1>Add to your quests</h1><div class="card" style="cursor:pointer" onclick="closeM();edit()"><div class="ic">${ICO_H}</div><div class="grow"><div class="nm">New habit</div><div class="sub">Something to train, review or master</div></div></div><div class="card" style="cursor:pointer" onclick="openBoss()"><div class="ic">${ICO_B}</div><div class="grow"><div class="nm">Boss battle</div><div class="sub">A one-time challenge with a deadline</div></div></div>`;$('#md').classList.add('on')}
+function openNew(){$('#sh').innerHTML=`<h1>Add to your quests</h1><div class="card" style="cursor:pointer" onclick="closeM();edit()"><div class="ic">${ICO_H}</div><div class="grow"><div class="nm">New habit</div><div class="sub">Something to fight, review or master</div></div></div><div class="card" style="cursor:pointer" onclick="openBoss()"><div class="ic">${ICO_B}</div><div class="grow"><div class="nm">Boss battle</div><div class="sub">A one-time challenge with a deadline</div></div></div>`;$('#md').classList.add('on')}
 function openBoss(id){const b=id&&S.bosses.find(x=>x.id==id);bd=b?JSON.parse(JSON.stringify(b)):{name:'',img:'',desc:'',hid:'',target:10,unit:'',period:'day',start:today(),end:today(),coins:50,exp:100,state:'active',prog:0};drawBoss();$('#md').classList.add('on')}
 function drawBoss(){const d=bd,hs=S.habits.filter(h=>h.type=='active'),P=[['day','Daily (1 day)'],['week','Weekly (7 days)'],['month','Monthly (1 month)'],['custom','Custom range']];
  $('#sh').innerHTML=`<h1>${d.id?'Boss battle':'New boss battle'}</h1>${d.id&&d.state!='active'?`<p class="note">${d.state=='won'?'Victory':'Defeat'} · ran ${d.start} to ${d.end}</p>`:''}
@@ -340,7 +421,7 @@ function drawBoss(){const d=bd,hs=S.habits.filter(h=>h.type=='active'),P=[['day'
  <div class="row"><div><label>Target</label><input type="number" min="1" value="${d.target}" oninput="bd.target=Math.max(1,+this.value||1)"></div><div><label>Unit</label><input placeholder="pages, times…" value="${esc(d.unit)}" oninput="bd.unit=this.value"></div></div>
  <label>Time frame</label><select onchange="bd.period=this.value;drawBoss()">${P.map(p=>`<option value="${p[0]}" ${d.period==p[0]?'selected':''}>${p[1]}</option>`).join('')}</select>
  <div class="row"><div><label>Starts</label><input type="date" value="${d.start}" onchange="bd.start=this.value||today()"></div>${d.period=='custom'?`<div><label>Ends</label><input type="date" value="${d.end}" onchange="bd.end=this.value"></div>`:''}</div>
- <div class="row"><div><label>Victory coins</label><input type="number" min="0" value="${d.coins}" oninput="bd.coins=+this.value||0"></div><div><label>Victory exp</label><input type="number" min="0" value="${d.exp}" oninput="bd.exp=+this.value||0"></div></div>
+ <div class="row"><div><label>Victory coins</label><input type="number" min="0" step="any" value="${d.coins}" oninput="bd.coins=+this.value||0"></div><div><label>Victory exp</label><input type="number" min="0" step="any" value="${d.exp}" oninput="bd.exp=+this.value||0"></div></div>
  <div class="row" style="margin-top:24px">${d.id?`<button class="btn d" onclick="delBoss('${d.id}')">Delete</button>`:''}<button class="btn g" onclick="cancelBoss()">Cancel</button><button class="btn" onclick="saveBoss()">Save</button></div>`}
 function saveBoss(){const d=bd;if(!d.name.trim())return toast('Give the boss battle a name');
  if(d.period=='day')d.end=d.start;else if(d.period=='week')d.end=addD(d.start,6);else if(d.period=='month'){const x=dt(d.start);x.setMonth(x.getMonth()+1);x.setDate(x.getDate()-1);d.end=iso(x)}
@@ -353,17 +434,29 @@ function addTag(t){t=(t||'').trim().toLowerCase();if(t&&!S.tags.includes(t)){S.t
 function delTag(t){S.tags=S.tags.filter(x=>x!=t);S.habits.forEach(h=>h.tags=(h.tags||[]).filter(x=>x!=t));save();render()}
 
 /* ---- editor ---- */
-function edit(id){const h=id?get(id):{id:uid(),name:'',desc:'',type:'active',status:'pending',tags:[],sched:{mode:'daily',count:1},pct:0,target:80,pxp:1,coins:5,exp:10,logs:{},isNew:1};
+function edit(id){const h=id?get(id):{id:uid(),name:'',desc:'',type:'active',status:'pending',tags:[],sched:{mode:'daily',count:1},pct:0,target:80,pxp:1,pcn:1,hist:[],coins:5,exp:10,logs:{},isNew:1};
  draft=JSON.parse(JSON.stringify(h));drawEd();$('#md').classList.add('on')}
 function closeM(){$('#md').classList.remove('on')}
 function cancelEd(){draft.isNew?closeM():openView(draft.id)}
 function cancelBoss(){bd.id?openBossView(bd.id):closeM()}
 function openView(id){const h=get(id);if(!h)return;
+ const act=h.type=='active',it=act&&live(h)?items().find(i=>i.h.id==id):null,tot=Object.values(h.logs||{}).reduce((a,b)=>a+b,0),hist=h.hist||[];
+ const cell=(l,v,w)=>`<div class="stat${w?' w2':''}"><small>${l}</small><b>${v}</b></div>`;let c='';
+ if(act){c+=cell('Schedule',esc(schedTxt(h))+(h.time?' · '+t12(h.time):''));
+  c+=cell(it?.week?'This week':'Today',it?`${it.done} / ${it.need}${h.qty?.on?' '+esc(h.qty.unit||'units'):''}${it.done>=it.need?' ✓':''}`:'Not active');
+  c+=cell('Reward',rwTxt(h));c+=cell('Started',h.since||'Not yet');
+  if(h.goal){const k=Math.min(h.comp||0,h.goal);c+=`<div class="stat w2"><small>Mastery</small><b>${k} / ${h.goal} to mastery</b><div class="bar"><div style="width:${k/h.goal*100}%"></div></div><div class="hint" style="margin:0">${tot} total logged</div></div>`}
+  else c+=cell('Progress',`${h.comp||0} completion${(h.comp||0)==1?'':'s'} · ${tot} logged`,1)}
+ else{const v=h.pct||0,t=h.target||80;
+  c+=`<div class="stat w2"><small>Mastery</small><b class="big">${v}%</b><div class="bar"><div style="width:${v}%"></div><u style="left:${t}%"></u></div><div class="hint" style="margin:0">Pass at ${t}%${v>=t?' · target reached':' · '+(t-v)+'% to go'}</div></div>`;
+  c+=cell('Reward',rwTxt(h));c+=cell('Completion bonus',`${COIN} ${h.coins||0} · ${h.exp||0} exp`);c+=cell('Started',h.since||'Not yet');c+=cell('History',hist.length?`${hist.length} change${hist.length>1?'s':''}`:'None yet')}
+ const pri=h.status=='pending'?`<button class="btn" style="width:100%;margin-top:18px" onclick="if(accept('${h.id}'))closeM()">Accept quest · start fighting</button>`:h.status=='complete'?`<button class="btn" style="width:100%;margin-top:18px" onclick="if(retake('${h.id}'))closeM()">Retake quest</button>`:'';
+ const pb=!act?`<div class="row sm" style="margin-top:18px">${live(h)?`<button class="btn g" onclick="openAdj('${h.id}',-1)">− Reduce</button>${addedToday(h)?'<button class="btn g" disabled>Added today</button>':`<button class="btn" onclick="openAdj('${h.id}',1)">+ Add</button>`}`:''}<button class="btn g" onclick="openHist('${h.id}')">History</button></div>`:'';
  $('#sh').innerHTML=`<div class="hero">${thumb(h.img)}</div><h1 style="margin:16px 0 6px">${esc(h.name)}</h1>
- <div class="sub"><span class="st ${h.status}">${h.status}</span>${cap(h.type)}${h.time&&h.type=='active'?' · '+t12(h.time):''}${h.type=='passive'?` · ${h.pct||0}% / ${h.target||80}%`:''}</div>
- <div>${(h.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join('')}</div>
+ <div class="chiprow"><span class="st ${h.status}">${sn(h.status)}</span><span class="st ty">${cap(h.type)}</span>${tgSp(h)}</div>
  <p class="full ${h.desc?'':'none'}">${h.desc?esc(h.desc):'No description yet.'}</p>
- <div class="row" style="margin-top:24px"><button class="btn d" onclick="delH('${h.id}')">Delete</button><button class="btn g" onclick="closeM()">Close</button><button class="btn" onclick="edit('${h.id}')">Edit</button></div>`;$('#md').classList.add('on')}
+ <div class="stats">${c}</div>${pri}${pb}
+ <div class="row" style="margin-top:18px"><button class="btn d" onclick="delH('${h.id}')">Delete</button><button class="btn g" onclick="closeM()">Close</button><button class="btn g" onclick="edit('${h.id}')">Edit</button></div>`;$('#md').classList.add('on')}
 function openBossView(id){const b=S.bosses.find(x=>x.id==id);if(!b)return;const on=b.state=='active';
  $('#sh').innerHTML=`<div class="hero">${thumb(b.img)}</div><h1 style="margin:16px 0 6px">${esc(b.name)}</h1>
  <div class="sub"><span class="st ${on?'training':b.state=='won'?'complete':'bad'}">${on?'Boss battle':b.state=='won'?'Victory':'Defeat'}</span>${bossProg(b)} / ${b.target} ${esc(b.unit||'')} · ${b.start} to ${b.end}</div>
@@ -376,7 +469,7 @@ function drawEd(){const d=draft,s=d.sched,L=live(d),a=d.type=='active';
  <label>Description (optional)</label><textarea rows="3" placeholder="What is this quest about?" oninput="draft.desc=this.value">${esc(d.desc)}</textarea>
  ${imgBlock(draft,'draft')}
  <label>Kind</label><div class="chips">${['active','passive'].map(k=>`<button class="chip ${d.type==k?'on':''}" onclick="draft.type='${k}';drawEd()">${k}</button>`).join('')}</div>
- <label>Status</label><div class="chips">${['pending','training','complete','review'].map(k=>`<button class="chip ${d.status==k?'on':''}" onclick="setSt('${k}')">${k}</button>`).join('')}</div>
+ <label>Status</label><div class="chips">${['pending','training','complete','review'].map(k=>`<button class="chip ${d.status==k?'on':''}" onclick="setSt('${k}')">${sn(k)}</button>`).join('')}</div>
  <label>Tags</label><div class="chips" style="flex-wrap:wrap">${S.tags.map(t=>`<button class="chip ${d.tags.includes(t)?'on':''}" onclick="togTag('${esc(t)}')">${esc(t)}</button>`).join('')}</div>
  <input id="et" placeholder="Create new tag and press Enter" onkeydown="if(event.key=='Enter'){addTag(this.value);draft.tags.push(this.value.trim().toLowerCase());drawEd()}">
  ${a&&L?`<label>How often</label><select onchange="draft.sched.mode=this.value;drawEd()">
@@ -387,11 +480,10 @@ function drawEd(){const d=draft,s=d.sched,L=live(d),a=d.type=='active';
   ${s.mode=='every'?`<label>Every how many days</label><input type="number" min="1" value="${s.n||1}" oninput="draft.sched.n=Math.max(1,+this.value)">`:''}
   <label>Target time (optional)</label>${timeSel(d.time)}
   <label>Track as</label><div class="chips">${tog("(draft.qty=draft.qty||{}).on=false;drawEd()",!d.qty?.on,'Check')}${tog("draft.qty=draft.qty||{};draft.qty.on=true;draft.qty.target=draft.qty.target||5;if(draft.qty.coins==null)draft.qty.coins=1;if(draft.qty.exp==null)draft.qty.exp=2;drawEd()",!!d.qty?.on,'Amount')}</div>
-  ${d.qty?.on?`<div class="row"><div><label>Target per occurrence</label><input type="number" min="1" value="${d.qty.target||5}" oninput="draft.qty.target=Math.max(1,+this.value||1)"></div><div><label>Unit</label><input value="${esc(d.qty.unit||'')}" placeholder="pages" oninput="draft.qty.unit=this.value"></div></div><div class="row"><div><label>Coins per unit</label><input type="number" min="0" value="${d.qty.coins??1}" oninput="draft.qty.coins=+this.value||0"></div><div><label>Exp per unit</label><input type="number" min="0" value="${d.qty.exp??2}" oninput="draft.qty.exp=+this.value||0"></div></div>`:''}
-  <label>Auto-complete after X completions (optional)</label><input type="number" min="0" value="${d.goal||''}" placeholder="Leave empty to keep training" oninput="draft.goal=Math.max(0,+this.value||0)">`:''}
- ${!a?`<label>Mastery now: ${d.pct||0}%</label><input class="pw" type="range" min="0" max="100" value="${d.pct||0}" oninput="draft.pct=+this.value;this.previousElementSibling.textContent='Mastery now: '+this.value+'%'">
-  <label>Passing percent: ${d.target||80}%</label><input class="pw" type="range" min="1" max="100" value="${d.target||80}" oninput="draft.target=+this.value;this.previousElementSibling.textContent='Passing percent: '+this.value+'%'">`:''}
- ${G()?(a?(d.qty?.on?'':`<label>Reward when done: coins / exp</label><div class="row"><input type="number" min="0" value="${d.coins??5}" oninput="draft.coins=+this.value"><input type="number" min="0" value="${d.exp??10}" oninput="draft.exp=+this.value"></div>`):`<label>Exp per 1% gained</label><input type="number" min="0" value="${d.pxp??1}" oninput="draft.pxp=+this.value"><label>Completion bonus: coins / exp</label><div class="row"><input type="number" min="0" value="${d.coins??5}" oninput="draft.coins=+this.value"><input type="number" min="0" value="${d.exp??10}" oninput="draft.exp=+this.value"></div>`):''}
+  ${d.qty?.on?`<div class="row"><div><label>Target per occurrence</label><input type="number" min="1" value="${d.qty.target||5}" oninput="draft.qty.target=Math.max(1,+this.value||1)"></div><div><label>Unit</label><input value="${esc(d.qty.unit||'')}" placeholder="pages" oninput="draft.qty.unit=this.value"></div></div><div class="row"><div><label>Coins per unit</label><input type="number" min="0" step="any" value="${d.qty.coins??1}" oninput="draft.qty.coins=+this.value||0"></div><div><label>Exp per unit</label><input type="number" min="0" step="any" value="${d.qty.exp??2}" oninput="draft.qty.exp=+this.value||0"></div></div>`:''}
+  <label>Auto-complete after X completions (optional)</label><input type="number" min="0" value="${d.goal||''}" placeholder="Leave empty to keep fighting" oninput="draft.goal=Math.max(0,+this.value||0)">`:''}
+ ${!a?`<div class="row"><div><label>Mastery now (%)</label><input type="number" min="0" max="100" value="${d.pct||0}" oninput="draft.pct=Math.min(100,Math.max(0,+this.value||0))"></div><div><label>Passing percent</label><input type="number" min="1" max="100" value="${d.target||80}" oninput="draft.target=Math.min(100,Math.max(1,+this.value||80))"></div></div><div class="hint">Later changes go through Add / Reduce on the Adventure tab, so coins and a note are recorded.</div>`:''}
+ ${G()?(a?(d.qty?.on?'':`<label>Reward when done: coins / exp</label><div class="row"><input type="number" min="0" step="any" value="${d.coins??5}" oninput="draft.coins=+this.value"><input type="number" min="0" step="any" value="${d.exp??10}" oninput="draft.exp=+this.value"></div>`):`<div class="row"><div><label>Coins per 1%</label><input type="number" min="0" step="any" value="${d.pcn??1}" oninput="draft.pcn=+this.value||0"></div><div><label>Exp per 1%</label><input type="number" min="0" step="any" value="${d.pxp??1}" oninput="draft.pxp=+this.value||0"></div></div><label>Completion bonus: coins / exp</label><div class="row"><input type="number" min="0" step="any" value="${d.coins??5}" oninput="draft.coins=+this.value"><input type="number" min="0" step="any" value="${d.exp??10}" oninput="draft.exp=+this.value"></div>`):''}
  <div class="row" style="margin-top:22px">${d.isNew?'':`<button class="btn d" onclick="delH()">Delete</button>`}<button class="btn g" onclick="cancelEd()">Cancel</button><button class="btn" onclick="saveH()">Save</button></div>`}
 function timeSel(t){const h=t?+t.slice(0,2):null,m=t?t.slice(3,5):'00',h12=h==null?'':(h%12||12),ap=h!=null&&h>=12?'PM':'AM';
  const ms=[];for(let i=0;i<60;i+=5)ms.push(pad(i));if(!ms.includes(m))ms.push(m),ms.sort();
@@ -403,15 +495,16 @@ function togTag(t){const a=draft.tags,i=a.indexOf(t);i<0?a.push(t):a.splice(i,1)
 function togDay(i){const a=draft.sched.days=draft.sched.days||[],j=a.indexOf(i);j<0?a.push(i):a.splice(j,1);drawEd()}
 function pic(f,o,cb){if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=400;const x=c.getContext('2d'),m=Math.min(im.width,im.height);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,400,400);o.img=c.toDataURL('image/jpeg',.8);cb()};im.src=r.result};r.readAsDataURL(f)}
 function saveH(){const d=draft;if(!d.name.trim())return toast('Give the habit a name');
- const old=get(d.id);if(!old||!live(old)||!old.since){if(live(d)&&!d.since)d.since=today()}
+ const old=get(d.id);if(live(d)&&(!old||!live(old)||old.type!=d.type)&&usedOf(d.type)>=slotsOf(d.type))return toast(slotMsg(d.type));
+ if(!old||!live(old)||!old.since){if(live(d)&&!d.since)d.since=today()}
  if(d.sched?.mode=='every')d.sched.anchor=d.sched.anchor||today();
  if(d.sched?.mode=='days'&&!(d.sched.days||[]).length)return toast('Pick at least one day');
- delete d.isNew;if(old)Object.assign(old,d);else S.habits.push(d);save();closeM();render();toast('Saved')}
+ delete d.isNew;if(d.type=='passive'){if(d.pcn==null)d.pcn=1;d.hist=d.hist||[]}if(old)Object.assign(old,d);else S.habits.push(d);save();closeM();render();toast('Saved')}
 function delH(id){id=id||draft.id;if(confirm('Delete this habit?')){S.habits=S.habits.filter(h=>h.id!=id);save();closeM();render()}}
 
 /* ---- import / export ---- */
 function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
-const CC=['id','name','desc','img','type','status','tags','sched','time','pct','target','since','logs','qty','goal','comp','coins','exp','pxp'];
+const CC=['id','name','desc','img','type','status','tags','sched','time','pct','target','since','logs','qty','goal','comp','coins','exp','pxp','pcn'];
 function exp(f){if(f=='json')return dl('questbits-'+today()+'.json',JSON.stringify(S,null,1),'application/json');
  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
  const rows=S.habits.map(h=>CC.map(c=>q(c=='tags'?(h.tags||[]).join(';'):['sched','logs','qty'].includes(c)?JSON.stringify(h[c]||{}):h[c])).join(','));
@@ -423,9 +516,9 @@ function parseCSV(t){const R=[];let r=[],c='',q=0;for(let i=0;i<t.length;i++){co
 $('#imp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{
  if(f.name.endsWith('.csv')){const [hd,...rows]=parseCSV(r.result).filter(x=>x.length>1);
   rows.forEach(v=>{const o={};hd.forEach((k,i)=>o[k]=v[i]);
-   const h={...o,tags:o.tags?o.tags.split(';'):[],sched:JSON.parse(o.sched||'{}'),logs:JSON.parse(o.logs||'{}'),qty:JSON.parse(o.qty||'{}'),goal:+o.goal||0,comp:+o.comp||0,coins:o.coins==null?5:+o.coins,exp:o.exp==null?10:+o.exp,pxp:o.pxp==null?1:+o.pxp,pct:+o.pct||0,target:+o.target||80};
+   const h={...o,tags:o.tags?o.tags.split(';'):[],sched:JSON.parse(o.sched||'{}'),logs:JSON.parse(o.logs||'{}'),qty:JSON.parse(o.qty||'{}'),goal:+o.goal||0,comp:+o.comp||0,coins:o.coins==null?5:+o.coins,exp:o.exp==null?10:+o.exp,pxp:o.pxp==null?1:+o.pxp,pcn:o.pcn==null?0:+o.pcn,pct:+o.pct||0,target:+o.target||80};
    h.tags.forEach(t=>{if(!S.tags.includes(t))S.tags.push(t)});const i=S.habits.findIndex(x=>x.id==h.id);i<0?S.habits.push(h):S.habits[i]=h})}
- else{const j=JSON.parse(r.result);if(!Array.isArray(j.habits))throw 0;S={...def(),...j}}
+ else{const j=JSON.parse(r.result);if(!Array.isArray(j.habits))throw 0;S={...def(),...j};migrate()}
  save();render();toast('Import complete')}catch{toast('Could not read that file')}e.target.value=''};r.readAsText(f)};
 
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
